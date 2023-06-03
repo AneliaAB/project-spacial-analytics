@@ -90,3 +90,19 @@ parks_per_district
 map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq)
 map
 ```
+
+```{r}
+# Prompt extracting school name 
+school_name = readline(prompt = "Enter any school name : ");
+
+# Displaying number of parks based on user generated word
+if (school_name %in% parks_per_district$enhedsnavn) {
+  # Print the row
+  filtered_row <- parks_per_district[parks_per_district$enhedsnavn == school_name, ]
+
+# Print the filtered rows
+  print("Number of parks for this school district is: ")
+  print(filtered_rows$freq)
+}
+
+```
