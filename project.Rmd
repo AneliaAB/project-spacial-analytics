@@ -3,6 +3,7 @@
 #install.packages("sf")
 library(leaflet)
 library(sf)
+library(dplyr)
 ```
 
 ```{r intersect, eval=FALSE}
@@ -15,6 +16,7 @@ layer1 <- st_transform(layer1, "+proj=longlat +datum=WGS84")
 
 # Check the CRS of the transformed layer
 st_crs(layer1)
+
 ```
 
 ```{r intersect, eval=FALSE}
@@ -28,12 +30,72 @@ map
 
 ```{r intersect, eval=FALSE}
 # Add the first layer to the map
-map <- map %>% addPolygons(data = layer1, color = "blue", fill = "blue", weight = 2)
+map <- map %>% addPolygons(data = layer1, color = "green", fill = "green", weight = 2)
 
 ```
 
 ```{r intersect, eval=FALSE}
 # Display the map
 map
-
 ```
+
+```{r intersect, eval=FALSE}
+# Display the map
+path <- file.path("data/skolegrunddistriktPolygon.shp")
+layer2 <- st_read(path)
+layer2 <- st_transform(layer2, crs = "+init=epsg:25832")
+
+layer2 <- st_transform(layer2, "+proj=longlat +datum=WGS84")
+
+# Check the CRS of the transformed layer
+st_crs(layer2)
+```
+
+```{r intersect, eval=FALSE}
+map <- map %>% addPolygons(data = layer2, color = "red", fill= "blue", weight = 2)
+map
+```
+
+```{r intersect, eval=FALSE}
+map <- map %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var layer1 = L.layerGroup();
+      var layer2 = L.layerGroup();
+
+      // Add the first layer polygons to the layer group
+      x.layer1.eachLayer(function(layer) {
+        layer1.addLayer(layer);
+      });
+
+      // Add the second layer polygons to the layer group
+      x.layer2.eachLayer(function(layer) {
+        layer2.addLayer(layer);
+      });
+
+      // Initialize the Spiderfier plugin
+      var spiderfier = new L.MarkerClusterGroup.Spiderfier();
+
+      // Add the layer groups to the Spiderfier plugin
+      spiderfier.addLayers([layer1, layer2]);
+
+      // Bind the 'spiderfierclick' event to handle overlapping polygons
+      spiderfier.on('spiderfierclick', function(event) {
+        var spiderfiedLayer = event.layer;
+
+        // Get the number of overlapping polygons for the clicked layer
+        var overlappingCount = spiderfiedLayer.getAllChildMarkers().length;
+
+        // Show the number of overlapping polygons in an alert
+        print('Number of overlapping polygons: ' + overlappingCount);
+      });
+
+      // Add the Spiderfier plugin to the map
+      map.addLayer(spiderfier);
+    }
+  ")
+
+# Display the map
+map
+```
+
