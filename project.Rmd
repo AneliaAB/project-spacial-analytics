@@ -101,12 +101,10 @@ map
 
 ```{r}
 library(dplyr)
-green <- st_read("data/park_groent_omr_oversigtskortPolygon.shp")
-schools <- st_read("data/skolegrunddistriktPolygon.shp")
 
 # Fix the geometry problems
-green <- st_make_valid(green)
-schools <- st_make_valid(schools)
+green <- st_make_valid(layer1)
+schools <- st_make_valid(layer2)
 
 # Perform the spatial overlay and join the attribute data
 intersection <- st_intersection(schools, green)
@@ -115,6 +113,24 @@ intersection <- st_intersection(schools, green)
 dataset <- table(intersection$id)
 ```
 ```{r}
-
+df1 <- data.frame(
+  id = c(1:56),
+  freq = c(54, 22, 22, 12, 9, 1, 18, 8, 8, 8, 10, 11, 15, 10, 12, 11, 56, 17, 0,  9, 33, 7, 41, 11, 17, 46, 9, 33, 17, 45, 60, 24, 12, 3, 8, 28, 4, 4, 36, 5, 17, 35, 2, 22, 56, 1, 20, 17, 27, 29, 18, 35, 5, 37, 7, 70)
+)
 ```
 
+```{r}
+# Perform the join based on the 'id' column
+joined_data <- schools %>%
+  inner_join(df1, by = c("id" = "id"))
+
+# Print the joined data
+parks_per_district <- subset(joined_data, select = c("park_freq", "enhedsnavn"))
+
+parks_per_district
+```
+
+```{r}
+map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq)
+map
+```
