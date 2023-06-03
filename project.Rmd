@@ -101,8 +101,7 @@ if (school_name %in% parks_per_district$enhedsnavn) {
   filtered_row <- parks_per_district[parks_per_district$enhedsnavn == school_name, ]
 
 # Print the filtered rows
-  print("Number of parks for this school district is: ")
-  print(filtered_rows$freq)
+  cat("Number of parks for this school district is: ", parks_per_district[parks_per_district$enhedsnavn == school_name, ]$freq) # Prints the number from freq column that matches the row with the same value as the user-generated word
 }
 
 ```
