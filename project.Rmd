@@ -98,3 +98,23 @@ map <- map %>%
 # Display the map
 map
 ```
+
+```{r}
+library(dplyr)
+green <- st_read("data/park_groent_omr_oversigtskortPolygon.shp")
+schools <- st_read("data/skolegrunddistriktPolygon.shp")
+
+# Fix the geometry problems
+green <- st_make_valid(green)
+schools <- st_make_valid(schools)
+
+# Perform the spatial overlay and join the attribute data
+intersection <- st_intersection(schools, green)
+
+#dataset with number of overlaps
+dataset <- table(intersection$id)
+```
+```{r}
+
+```
+
