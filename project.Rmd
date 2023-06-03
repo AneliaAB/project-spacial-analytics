@@ -1,0 +1,39 @@
+```{r intersect, eval=FALSE}
+#install.packages("leaflet")
+#install.packages("sf")
+library(leaflet)
+library(sf)
+```
+
+```{r intersect, eval=FALSE}
+# Read and prepare the first layer
+path <- file.path("data/park_groent_omr_oversigtskortPolygon.shp")
+layer1 <- st_read(path)
+layer1 <- st_transform(layer1, crs = "+init=epsg:25832")
+
+layer1 <- st_transform(layer1, "+proj=longlat +datum=WGS84")
+
+# Check the CRS of the transformed layer
+st_crs(layer1)
+```
+
+```{r intersect, eval=FALSE}
+# Create a leaflet map
+map <- leaflet() %>%
+  setView(lng =12.565671 , lat = 55.684818, zoom = 12) %>%
+  addTiles()
+
+map
+```
+
+```{r intersect, eval=FALSE}
+# Add the first layer to the map
+map <- map %>% addPolygons(data = layer1, color = "blue", fill = "blue", weight = 2)
+
+```
+
+```{r intersect, eval=FALSE}
+# Display the map
+map
+
+```
