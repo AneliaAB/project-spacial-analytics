@@ -98,4 +98,3 @@ map <- map %>%
 # Display the map
 map
 ```
-
