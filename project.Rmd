@@ -79,16 +79,19 @@ df1 <- data.frame(
 joined_data <- schools %>%
   inner_join(df1, by = c("id" = "id"))
 
-# Creating dataframe with only the park frequency per district and the name of the school district
-parks_per_district <- subset(joined_data, select = c("freq", "enhedsnavn"))
-
-parks_per_district
 ```
 
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
 map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq)
 map
+```
+
+```{r}
+# Creating dataframe with only the park frequency per district and the name of the school district
+parks_per_district <- subset(joined_data, select = c("freq", "enhedsnavn"))
+
+parks_per_district
 ```
 
 ```{r}
