@@ -23,14 +23,18 @@ st_crs(green_areas)
 # Createing a leaflet map with center coordinates and zoom level 
 map <- leaflet() %>%
   setView(lng =12.565671 , lat = 55.684818, zoom = 12) %>%
-  addTiles()
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addLayersControl(
+    overlayGroups = c("Green areas", "School districts"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
 
 map
 ```
 
 ```{r intersect, eval=FALSE}
 # Adding the green areas to the map
-map <- map %>% addPolygons(data = green_areas, color = "green", fill = "green", weight = 2)
+map <- map %>% addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas")
 
 map
 ```
@@ -49,7 +53,7 @@ st_crs(school_districts)
 
 ```{r intersect, eval=FALSE}
 #Adding second layer to leaflet map
-map <- map %>% addPolygons(data = school_districts, color = "red", fill= "blue", weight = 2)
+map <- map %>% addPolygons(data = school_districts, color = "red", fill= "blue", weight = 2, group = "School districts")
 map
 ```
 
@@ -106,5 +110,8 @@ if (school_name %in% parks_per_district$enhedsnavn) {
 # Print the filtered rows
   cat("Number of parks for this school district is: ", parks_per_district[parks_per_district$enhedsnavn == school_name, ]$freq) # Prints the number from freq column that matches the row with the same value as the user-generated word
 }
+```
 
+```{r}
+map
 ```
