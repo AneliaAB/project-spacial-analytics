@@ -50,13 +50,6 @@ school_districts <- st_transform(school_districts, "+proj=longlat +datum=WGS84")
 st_crs(school_districts)
 ```
 
-```{r intersect, eval=FALSE}
-#Adding second layer to leaflet map
-#map <- map %>% addPolygons(data = school_districts, color = "red", fill= "blue", weight = 2, group = "School districts")
-#map
-```
-
-
 ```{r}
 # Error fix: fixing geometry problems with st_make_valid
 green_areas_valid <- st_make_valid(green_areas)
@@ -79,21 +72,21 @@ df1 <- data.frame(
 
 ```{r}
 # Joining based on the 'id' column
-joined_data <- school_districts_valid %>%
+school_districts_valid <- school_districts_valid %>%
   inner_join(df1, by = c("id" = "id"))
 
 ```
 
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
-map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq, , group = "School districts") %>%
+map <- map %>% addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, , group = "School districts") %>%
   addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas")
 map
 ```
 
 ```{r}
 # Creating dataframe with only the park frequency per district and the name of the school district
-parks_per_district <- subset(joined_data, select = c("freq", "enhedsnavn"))
+parks_per_district <- subset(school_districts_valid, select = c("freq", "enhedsnavn"))
 
 parks_per_district
 ```
