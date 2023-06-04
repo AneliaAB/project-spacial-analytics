@@ -1,7 +1,10 @@
 ```{r intersect, eval=FALSE}
-install.packages("leaflet")
-install.packages("sf")
-install.packages("dplyr")
+#install.packages("leaflet")
+#install.packages("sf")
+#install.packages("dplyr")
+#install.packages("rlang")
+#update.packages()
+
 library(leaflet)
 library(sf)
 library(dplyr)
@@ -53,8 +56,8 @@ st_crs(school_districts)
 
 ```{r intersect, eval=FALSE}
 #Adding second layer to leaflet map
-map <- map %>% addPolygons(data = school_districts, color = "red", fill= "blue", weight = 2, group = "School districts")
-map
+#map <- map %>% addPolygons(data = school_districts, color = "red", fill= "blue", weight = 2, group = "School districts")
+#map
 ```
 
 
@@ -80,14 +83,14 @@ df1 <- data.frame(
 
 ```{r}
 # Joining based on the 'id' column
-joined_data <- schools %>%
+joined_data <- school_districts_valid %>%
   inner_join(df1, by = c("id" = "id"))
 
 ```
 
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
-map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq)
+map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq, , group = "School districts")
 map
 ```
 
@@ -110,8 +113,4 @@ if (school_name %in% parks_per_district$enhedsnavn) {
 # Print the filtered rows
   cat("Number of parks for this school district is: ", parks_per_district[parks_per_district$enhedsnavn == school_name, ]$freq) # Prints the number from freq column that matches the row with the same value as the user-generated word
 }
-```
-
-```{r}
-map
 ```
