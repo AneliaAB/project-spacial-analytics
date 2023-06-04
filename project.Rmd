@@ -26,10 +26,12 @@ st_crs(green_areas)
 # Createing a leaflet map with center coordinates and zoom level 
 map <- leaflet() %>%
   setView(lng =12.565671 , lat = 55.684818, zoom = 12) %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
+  addTiles(group = "OSM (default)") %>%
+  addProviderTiles(providers$CartoDB.Positron, group = "CartoDB") %>%
   addLayersControl(
     overlayGroups = c("Green areas", "School districts"),
-    options = layersControlOptions(collapsed = FALSE)
+    options = layersControlOptions(collapsed = FALSE), 
+    baseGroups = c("OSM (default)", "CartonDB")
   )
 
 map
