@@ -79,9 +79,15 @@ school_districts_valid <- school_districts_valid %>%
 
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
-map <- map %>% addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, , group = "School districts") %>%
-  addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas")
+map <- map %>%
+  addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, , group = "School districts") %>%
+  addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas") 
 map
+```
+
+```{r}
+library(htmlwidgets)
+saveWidget(map, file="out/map.html")
 ```
 
 ```{r}
