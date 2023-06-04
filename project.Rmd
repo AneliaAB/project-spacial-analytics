@@ -37,12 +37,6 @@ map <- leaflet() %>%
 map
 ```
 
-```{r intersect, eval=FALSE}
-# Adding the green areas to the map
-map <- map %>% addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas")
-
-map
-```
 
 ```{r intersect, eval=FALSE}
 # Reading the second layer -> school districts 
@@ -92,7 +86,8 @@ joined_data <- school_districts_valid %>%
 
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
-map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq, , group = "School districts")
+map <- map %>% addPolygons(data = joined_data, color = "red", fill= "blue", weight = 2, label=joined_data$freq, , group = "School districts") %>%
+  addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas")
 map
 ```
 
