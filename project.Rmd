@@ -25,7 +25,7 @@ st_crs(green_areas)
 ```{r intersect, eval=FALSE}
 # Createing a leaflet map with center coordinates and zoom level 
 map <- leaflet() %>%
-  setView(lng =12.565671 , lat = 55.684818, zoom = 12) %>%
+  setView(lng =12.565671 , lat = 55.684818, zoom = 13) %>%
   addTiles(group = "OSM (default)") %>%
   addProviderTiles(providers$CartoDB.Positron, group = "CartoDB") %>%
   addLayersControl(
@@ -109,4 +109,18 @@ if (school_name %in% parks_per_district$enhedsnavn) {
 # Print the filtered rows
   cat("Number of parks for this school district is: ", parks_per_district[parks_per_district$enhedsnavn == school_name, ]$freq) # Prints the number from freq column that matches the row with the same value as the user-generated word
 }
+```
+
+##HEATMAP
+
+```{r}
+library(ggplot2)
+ggplot() +
+geom_sf(data = parks_per_district,
+        aes(fill = freq),
+            color = "white",
+            size = 0.1) +
+scale_fill_gradient(name = "Number of parks", 
+                    low = "light blue",
+                    high = "dark blue") 
 ```
