@@ -64,8 +64,6 @@ school_districts_valid$udd_distr0 <- gsub("[^[:alnum:] ]", "", school_districts_
 school_districts_valid$cvr_navn <- gsub("[^[:alnum:] ]", "", school_districts_valid$cvr_navn)
 school_districts_valid$status <- gsub("[^[:alnum:] ]", "", school_districts_valid$status)
 
-print(school_districts_valid)
-
 # Joining the attribute data and using st_intersection to detect spacial overlay
 intersection <- st_intersection(school_districts_valid, green_areas_valid)
 
@@ -73,15 +71,15 @@ intersection <- st_intersection(school_districts_valid, green_areas_valid)
 dataset <- table(intersection$id)
 ```
 
-```{r}
+```{r manual df}
 # Manually transforming 'dataset' into dataframe
 df1 <- data.frame(
   id = c(1:56),
-  freq = c(54, 22, 22, 12, 9, 1, 18, 8, 8, 8, 10, 11, 15, 10, 12, 11, 56, 17, 0,  9, 33, 7, 41, 11, 17, 46, 9, 33, 17, 45, 60, 24, 12, 3, 8, 28, 4, 4, 36, 5, 17, 35, 2, 22, 56, 1, 20, 17, 27, 29, 18, 35, 5, 37, 7, 70)
+  freq = c(54, 22, 22, 12, 9, 1, 18, 8, 8, 8, 10, 11, 15, 10, 12, 11, 56, 17, NA,  9, 33, 7, 41, 11, 17, 46, 9, 33, 17, 45, 60, 24, 12, 3, 8, 28, 4, 4, 36, 5, 17, 35, 2, 22, 56, 1, 20, 17, 27, 29, 18, 35, 5, 37, 7, 70)
 )
 ```
 
-```{r}
+```{r inner join}
 # Joining based on the 'id' column
 school_districts_valid <- school_districts_valid %>%
   inner_join(df1, by = c("id" = "id"))
@@ -133,7 +131,8 @@ geom_sf(data = parks_per_district,
             size = 0.1) +
 scale_fill_gradient(name = "Number of green areas", 
                     low = "light blue",
-                    high = "dark blue") 
+                    high = "dark blue",
+                    na.value = "pink")
 ggsave("out/heatmap.png")
 ```
 
