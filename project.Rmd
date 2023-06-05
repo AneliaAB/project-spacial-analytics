@@ -137,4 +137,3 @@ scale_fill_gradient(name = "Number of green areas",
 ggsave("out/heatmap.png")
 ```
 
-
