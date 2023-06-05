@@ -134,6 +134,7 @@ geom_sf(data = parks_per_district,
 scale_fill_gradient(name = "Number of green areas", 
                     low = "light blue",
                     high = "dark blue") 
+ggsave("out/heatmap.png")
 ```
 
 
