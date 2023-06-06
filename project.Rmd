@@ -1,9 +1,7 @@
-```{r intersect, eval=FALSE}
-#install.packages("leaflet")
-#install.packages("sf")
-#install.packages("dplyr")
-#install.packages("rlang")
-#update.packages()
+```{r packages, eval=FALSE}
+install.packages("leaflet")
+install.packages("sf")
+install.packages("dplyr")
 
 library(leaflet)
 library(sf)
@@ -19,7 +17,7 @@ map <- leaflet() %>%
   addTiles(group = "OSM (default)") %>%
   addProviderTiles(providers$CartoDB.Positron, group = "CartoDB") %>%
   addLayersControl(
-    overlayGroups = c("Green areas", "School districts"),
+    overlayGroups = c("Green areas", "School districts"), #option for removing and adding layers
     options = layersControlOptions(collapsed = FALSE), 
     baseGroups = c("OSM (default)", "CartonDB")
   )
@@ -57,7 +55,9 @@ st_crs(school_districts)
 ```{r}
 # Error fix: fixing geometry problems with st_make_valid
 green_areas_valid <- st_make_valid(green_areas)
-school_districts_valid <- st_make_valid(school_districts)
+school_districts_valid <- st_make_valid(school_districts) #validating data
+
+#cleaning data bu removing special characters 
 school_districts_valid$enhedsnavn <- gsub("[^[:alnum:] ]", "", school_districts_valid$enhedsnavn)
 school_districts_valid$bydelsnavn <- gsub("[^[:alnum:] ]", "", school_districts_valid$bydelsnavn)
 school_districts_valid$udd_distr0 <- gsub("[^[:alnum:] ]", "", school_districts_valid$udd_distr0)
@@ -89,7 +89,7 @@ school_districts_valid <- school_districts_valid %>%
 ```{r}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
 map <- map %>%
-  addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, , group = "School districts") %>%
+  addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, group = "School districts") %>%
   addPolygons(data = green_areas, color = "green", fill = "green", weight = 2, group = "Green areas") 
 map
 ```
@@ -127,12 +127,12 @@ library(ggplot2)
 ggplot() +
 geom_sf(data = parks_per_district,
         aes(fill = freq),
-            color = "white",
+            color = "white", #boarders
             size = 0.1) +
 scale_fill_gradient(name = "Number of green areas", 
-                    low = "light blue",
-                    high = "dark blue",
-                    na.value = "pink")
+                    low = "light blue", #gradient color
+                    high = "dark blue", #gradient color
+                    na.value = "pink") #NA values are illustrated with pink 
 ggsave("out/heatmap.png")
 ```
 
