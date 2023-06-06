@@ -10,7 +10,7 @@ library(dplyr)
 
 
 ##Creating leaflet map/baselayer
-```{r intersect, eval=FALSE}
+```{r map}
 # Createing a leaflet map with center coordinates and zoom level 
 map <- leaflet() %>%
   setView(lng =12.565671 , lat = 55.684818, zoom = 13) %>%
@@ -26,7 +26,7 @@ map
 ```
 
 ##Loading data
-```{r intersect, eval=FALSE}
+```{r adding layer}
 # Reading and preparing the first layer - green areas in Copenhagen 
 path <- file.path("data/park_groent_omr_oversigtskortPolygon.shp") #path to file
 green_areas <- st_read(path)
@@ -41,7 +41,7 @@ st_crs(green_areas)
 
 
 
-```{r intersect, eval=FALSE}
+```{r adding layer}
 # Reading the second layer -> school districts 
 path <- file.path("data/skolegrunddistriktPolygon.shp")
 school_districts <- st_read(path)
@@ -52,7 +52,7 @@ school_districts <- st_transform(school_districts, "+proj=longlat +datum=WGS84")
 # Checking the CRS of the transformed layer
 st_crs(school_districts)
 ```
-```{r}
+```{r cleaning data}
 # Error fix: fixing geometry problems with st_make_valid
 green_areas_valid <- st_make_valid(green_areas)
 school_districts_valid <- st_make_valid(school_districts) #validating data
@@ -86,7 +86,7 @@ school_districts_valid <- school_districts_valid %>%
 ```
 
 ##Adding two layers to basemap
-```{r}
+```{r plotting layers}
 # Adding school districts with number of parks as label. Label displays when mouse hovers over district
 map <- map %>%
   addPolygons(data = school_districts_valid, color = "red", fill= "blue", weight = 2, label=school_districts_valid$freq, group = "School districts") %>%
@@ -94,7 +94,7 @@ map <- map %>%
 map
 ```
 ##Saving map as html file
-```{r}
+```{r saving}
 library(htmlwidgets)
 saveWidget(map, file="out/map.html")
 ```
@@ -106,7 +106,7 @@ parks_per_district <- subset(school_districts_valid, select = c("freq", "enhedsn
 parks_per_district
 ```
 ##User-generated word produces number of parks 
-```{r}
+```{r prompt}
 # Prompt extracting school name 
 school_name = readline(prompt = "Enter any school name : ");
 
@@ -122,7 +122,7 @@ if (school_name %in% parks_per_district$enhedsnavn) {
 
 ##HEATMAP
 
-```{r}
+```{r heatmap}
 library(ggplot2)
 ggplot() +
 geom_sf(data = parks_per_district,
